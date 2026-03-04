@@ -194,6 +194,8 @@ haproxy:
     labels: {}
     # -- HAProxy service annotations
     annotations: null
+    # -- (string) ClusterIP for the HAProxy service. Set to "None" for a headless service (returns pod IPs instead of service IP)
+    clusterIP: ""
 
     # -- List of CIDR's allowed to connect to LoadBalancer
     loadBalancerSourceRanges: []

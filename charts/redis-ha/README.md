@@ -291,6 +291,7 @@ The following table lists the configurable parameters of the Redis chart and the
 | `haproxy.resources` | HAProxy resources | object | `{}` |
 | `haproxy.securityContext` | Security context to be added to the HAProxy deployment. | object | `{"fsGroup":99,"runAsNonRoot":true,"runAsUser":99}` |
 | `haproxy.service.annotations` | HAProxy service annotations | string | `nil` |
+| `haproxy.service.clusterIP` | ClusterIP for the HAProxy service. Set to "None" for a headless service (returns pod IPs instead of service IP) | string | `""` |
 | `haproxy.service.externalIPs` | HAProxy external IPs | object | `{}` |
 | `haproxy.service.externalTrafficPolicy` | HAProxy service externalTrafficPolicy value (haproxy.service.type must be LoadBalancer) | string | `nil` |
 | `haproxy.service.labels` | HAProxy service labels | object | `{}` |
@@ -437,6 +438,19 @@ A such case could happen if the orchestator is pending the nomination of redis p
 Risk is limited because announce-service is using `publishNotReadyAddresses: true`, although, in such case, HAProxy pod will be rescheduled afterward by the orchestrator.
 
 PodDisruptionBudgets are not configured by default, you may need to set the `haproxy.podDisruptionBudget` parameter in values.yaml to enable it.
+
+## HAProxy headless service
+
+By default, the HAProxy service uses a ClusterIP that load balances traffic across HAProxy pods. If you need to access individual HAProxy pod IPs directly (e.g., for DNS-based discovery), you can configure the service as headless:
+
+```yaml
+haproxy:
+  enabled: true
+  service:
+    clusterIP: "None"
+```
+
+When configured as headless, DNS queries will return the IP addresses of all HAProxy pods instead of a single virtual service IP.
 
 ## Network policies
 
