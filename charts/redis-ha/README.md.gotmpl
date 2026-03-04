@@ -180,6 +180,19 @@ Risk is limited because announce-service is using `publishNotReadyAddresses: tru
 
 PodDisruptionBudgets are not configured by default, you may need to set the `haproxy.podDisruptionBudget` parameter in values.yaml to enable it.
 
+## HAProxy headless service
+
+By default, the HAProxy service uses a ClusterIP that load balances traffic across HAProxy pods. If you need to access individual HAProxy pod IPs directly (e.g., for DNS-based discovery), you can configure the service as headless:
+
+```yaml
+haproxy:
+  enabled: true
+  service:
+    clusterIP: "None"
+```
+
+When configured as headless, DNS queries will return the IP addresses of all HAProxy pods instead of a single virtual service IP.
+
 ## Network policies
 
 If `networkPolicy.enabled` is set to `true`, then a `NetworkPolicy` resource is created with default rules to allow inter-Redis and Sentinel connectivity.
